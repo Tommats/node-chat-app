@@ -19,11 +19,12 @@ io.on('connection', (socket) =>{
 
   socket.broadcast.emit('newMessage', generateMessage('Admin','New user has joined the chat'));
 
-  socket.on('createMessage', (newMessage) => {
-    newMessage.createdAt = Date.now();
-    console.log('createMessage', newMessage);
-    io.emit('newMessage', generateMessage(newMessage.from, newMessage.text));
-    // socket.broadcast.emit('newMessage', {newMessage}); broadcast allows to emit everyone expect the actual "sender".
+  socket.on('createMessage', (message, callback) => {
+    message.createdAt = Date.now();
+    console.log('createMessage', message);
+    io.emit('newMessage', generateMessage(message.from, message.text));
+    // socket.broadcast.emit('message', {message}); broadcast allows to emit everyone expect the actual "sender".
+    callback('This is from the server.');
   });
 
   socket.on('disconnect', () => {
